@@ -19,16 +19,25 @@ const Image = styled.img`
   width: 100%;
 `;
 
-const Card = ({ data: { image, name, origin, species, status } }) => {
+const Card = ({
+  data: { image, name, origin, species, status, id, location },
+}) => {
   const formatedName = formatName(name);
+
+  const selectedChar = {
+    pathname: `${formatedName}`,
+    charId: id,
+  };
+
   return (
-    <StyledLink to={`${formatedName}`}>
+    <StyledLink to={selectedChar}>
       <CardContainer>
         <Image src={image} alt="Character" />
         <p>Name: {name}</p>
         <p>Origin: {origin.name}</p>
         <p>Race: {species}</p>
         <p>Status: {status}</p>
+        <p>Current location: {location.name}</p>
       </CardContainer>
     </StyledLink>
   );

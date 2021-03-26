@@ -1,8 +1,8 @@
 import React from "react";
-import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { formatName } from "../utils/formatName";
+import { useQuery } from "react-query";
+import NeighbourResidents from "../components/NeighbourResidents";
 
 const Section = styled.section`
   display: flex;
@@ -12,55 +12,47 @@ const Section = styled.section`
   margin: 64px;
 `;
 
-const Flex = styled.div`
-  display: flex;
-  margin-bottom: 128px;
-
-  & > *:not(:last-child) {
-    margin-right: 8px;
-  }
+const StyledLink = styled(Link)`
+  margin-top: 32px;
 `;
 
-const CharacterPage = ({ data }) => {
-  const { character } = useParams();
+const CharacterPage = (props) => {
+  const id = props.location.charId;
 
-  const currentCharacter = data.find(
-    ({ name }) => formatName(name) === character
+  const fetchCurrentCharacter = async (id) => {
+    const res = await fetch(`https://rickandmortyapi.com/api/character/${id}`);
+    return res.json();
+  };
+
+  const { data, status } = useQuery(["characters", id], () =>
+    fetchCurrentCharacter(id)
   );
 
-  const {
-    image,
-    name,
-    origin,
-    gender,
-    species,
-    status,
-    episode,
-  } = currentCharacter;
+  if (status === "error") {
+    return <div>Error: sorry something went wrong please try again later</div>;
+  } else if (status === "loading") {
+    return <div>Loading...</div>;
+  } else {
+    const { image, name, origin, gender, species, status, location } = data;
+    const currentCharacterGender =
+      gender === "Male" ? "He" : gender === "Female" ? "She" : "It";
 
-  const currentCharacterGender =
-    gender === "Male" ? "He" : gender === "Female" ? "She" : "It";
-
-  return (
-    <Section>
-      <h1>Well hello there, this is {name}'s profile !</h1>
-      <img src={image} alt="Character" />
-      <p>
-        {name} is from {origin.name}
-      </p>
-      <p>
-        {currentCharacterGender} is {species} and currently {status}
-      </p>
-      <p>{currentCharacterGender} appeared in these episodes:</p>
-      <Flex>
-        {episode.map((item) => {
-          const episodeNumber = item.slice(-3).replace(/\D/g, "");
-          return <a href={item}>{episodeNumber}</a>;
-        })}
-      </Flex>
-      <Link to="/">Go back &rarr;</Link>
-    </Section>
-  );
+    return (
+      <Section>
+        <h1>Well hello there, this is {name}'s profile !</h1>
+        <img src={image} alt="Character" />
+        <p>
+          {name} is from {origin.name}
+        </p>
+        <p>
+          {currentCharacterGender} is {species} and currently {status}
+        </p>
+        <p>Other {location.name} residents are:</p>
+        <NeighbourResidents location={location.url} />
+        <StyledLink to="/">Go back &rarr;</StyledLink>
+      </Section>
+    );
+  }
 };
 
 export default CharacterPage;

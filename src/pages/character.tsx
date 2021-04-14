@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import NeighbourResidents from "../components/NeighbourResidents";
+import { Context } from "../Context";
 
 const Section = styled.section`
   display: flex;
@@ -16,10 +17,13 @@ const StyledLink = styled(Link)`
   margin-top: 32px;
 `;
 
-const CharacterPage = (props) => {
-  const id = props.location.charId;
+type CharacterPageProps = {};
 
-  const fetchCurrentCharacter = async (id) => {
+const CharacterPage: React.FC<CharacterPageProps> = () => {
+  const context = React.useContext(Context);
+  const id = context.selectedCharId || localStorage.getItem("id");
+
+  const fetchCurrentCharacter = async (id: string) => {
     const res = await fetch(`https://rickandmortyapi.com/api/character/${id}`);
     return res.json();
   };
@@ -27,6 +31,10 @@ const CharacterPage = (props) => {
   const { data, status } = useQuery(["characters", id], () =>
     fetchCurrentCharacter(id)
   );
+
+  useEffect(() => {
+    localStorage.setItem("id", id);
+  }, [id]);
 
   if (status === "error") {
     return <div>Error: sorry something went wrong please try again later</div>;
@@ -39,6 +47,7 @@ const CharacterPage = (props) => {
 
     return (
       <Section>
+        <StyledLink to="/">Homepage &rarr;</StyledLink>
         <h1>Well hello there, this is {name}'s profile !</h1>
         <img src={image} alt="Character" />
         <p>
@@ -49,7 +58,6 @@ const CharacterPage = (props) => {
         </p>
         <p>Other {location.name} residents are:</p>
         <NeighbourResidents location={location.url} />
-        <StyledLink to="/">Go back &rarr;</StyledLink>
       </Section>
     );
   }

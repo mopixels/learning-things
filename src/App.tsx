@@ -3,11 +3,12 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import CharacterPage from "./pages/character";
 import HomePage from "./pages/homePage";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ContextProvider } from "./Context";
 
 const queryClient = new QueryClient();
 
-function App() {
-  return (
+const App: React.FC = () => (
+  <ContextProvider>
     <QueryClientProvider client={queryClient}>
       <Router>
         <Switch>
@@ -18,7 +19,7 @@ function App() {
         </Switch>
       </Router>
     </QueryClientProvider>
-  );
-}
+  </ContextProvider>
+);
 
 export default App;

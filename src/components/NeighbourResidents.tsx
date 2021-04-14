@@ -10,8 +10,14 @@ const Neighbours = styled.div`
   grid-gap: 16px;
 `;
 
-const NeighbourResidents = ({ location }) => {
-  const fetchLocationResidents = async () => {
+type NeighbourResidentsProps = {
+  location: string;
+};
+
+const NeighbourResidents: React.FC<NeighbourResidentsProps> = ({
+  location,
+}) => {
+  const fetchLocationResidents = async (location) => {
     const res = await fetch(`${location}`);
     return res.json();
   };
@@ -50,8 +56,8 @@ const NeighbourResidents = ({ location }) => {
   } else {
     return (
       <Neighbours>
-        {characterList?.data.map((character) => (
-          <Card key={character.name} data={character} />
+        {characterList?.data.map((character, i) => (
+          <Card key={character.name + i} data={character} />
         ))}
       </Neighbours>
     );

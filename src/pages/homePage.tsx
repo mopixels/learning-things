@@ -26,7 +26,7 @@ const CtaContainer = styled.div`
   }
 `;
 
-const HomePage = () => {
+const HomePage: React.FC = () => {
   const fetchCharacters = async ({ pageParam = 1 }) => {
     if (typeof pageParam === "number") {
       const res = await fetch(
@@ -59,8 +59,8 @@ const HomePage = () => {
       <Section>
         <CardGrid>
           {data.pages.map((page) =>
-            page.results.map((character) => (
-              <Card key={character.name} data={character} />
+            page.results.map((character, i) => (
+              <Card key={character.name + i} data={character} />
             ))
           )}
         </CardGrid>

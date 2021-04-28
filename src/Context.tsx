@@ -1,23 +1,23 @@
 import * as React from "react";
 
 type ContextProps = {
-  selectedChar: (id: selectedCharProps) => void;
-  selectedCharId: string;
+  getCharId: (id: selectedCharProps) => void;
+  selectedCharId: number;
 };
 
 type selectedCharProps = {
-  id: string;
+  id: number;
 };
 
 export const Context = React.createContext<ContextProps>({
-  selectedChar: () => null,
-  selectedCharId: "",
+  getCharId: () => null,
+  selectedCharId: 0,
 });
 
 export const ContextProvider: React.FC = ({ children }) => {
-  const [selectedCharId, setSelectedCharId] = React.useState(null);
+  const [selectedCharId, setSelectedCharId] = React.useState(0);
 
-  const selectedChar = ({ id }: selectedCharProps) => {
+  const getCharId = ({ id }: selectedCharProps) => {
     setSelectedCharId(id);
   };
 
@@ -25,7 +25,7 @@ export const ContextProvider: React.FC = ({ children }) => {
     <Context.Provider
       value={{
         selectedCharId,
-        selectedChar,
+        getCharId,
       }}
     >
       {children}

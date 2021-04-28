@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Card from "../components/Card";
 import { useInfiniteQuery } from "react-query";
+import { CharacterProps } from "types/types";
 
 const Section = styled.section`
   display: flex;
@@ -47,7 +48,7 @@ const HomePage: React.FC = () => {
     isFetchingNextPage,
     status,
   } = useInfiniteQuery("characters", fetchCharacters, {
-    getNextPageParam: (lastPage, pages) => lastPage.info.next,
+    getNextPageParam: (lastPage) => lastPage.info.next,
   });
 
   if (status === "error") {
@@ -58,9 +59,9 @@ const HomePage: React.FC = () => {
     return (
       <Section>
         <CardGrid>
-          {data.pages.map((page) =>
-            page.results.map((character, i) => (
-              <Card key={character.name + i} data={character} />
+          {data?.pages.map((page) =>
+            page.results.map((character: CharacterProps, i: number) => (
+              <Card key={character.name + i} character={character} />
             ))
           )}
         </CardGrid>

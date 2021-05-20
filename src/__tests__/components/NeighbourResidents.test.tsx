@@ -1,6 +1,6 @@
 import React from "react";
 import { render, RenderResult } from "@testing-library/react";
-import NeighbourResidents from "../../components/NeighbourResidents";
+import NeighborResidents from "../../components/NeighborResidents";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 const queryClient = new QueryClient();
@@ -9,16 +9,16 @@ let documentBody: RenderResult;
 
 const locationUrl = "https://rickandmortyapi.com/api/location/20";
 
-describe("<NeighbourResidents />", () => {
+describe("<NeighborResidents />", () => {
   beforeEach(() => {
     documentBody = render(
       <QueryClientProvider client={queryClient}>
-        <NeighbourResidents locationUrl={locationUrl} />
+        <NeighborResidents locationUrl={locationUrl} />
       </QueryClientProvider>
     );
   });
 
-  it("<NeighbourResidents /> should contain text Rick Sanchez", () => {
+  it("<NeighborResidents /> should contain text Rick Sanchez", () => {
     expect(documentBody.getByText("Rick Sanchez")).toBeInTheDocument();
   });
 });

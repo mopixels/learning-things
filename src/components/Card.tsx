@@ -2,8 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { formatName } from "../utils/formatName";
-import { Context } from "../Context";
 import { CharacterProps } from "types/types";
+import { useDispatch } from "react-redux";
+import { getSelectedCharId } from "redux/actions/actions";
+import { LoadingMessage } from "./LoadingMessage";
 
 const StyledLink = styled(Link)`
   text-decoration: none;
@@ -21,6 +23,10 @@ const Image = styled.img`
   width: 100%;
 `;
 
+const InfoContainer = styled.div`
+  padding: 0 4px;
+`;
+
 type CardProps = {
   character: CharacterProps;
 };
@@ -28,24 +34,30 @@ type CardProps = {
 const Card: React.FC<CardProps> = ({
   character: { image, name, origin, species, status, id, location },
 }) => {
-  const formatedName = formatName(name);
+  const dispatch = useDispatch();
 
-  return (
-    <Context.Consumer>
-      {({ getCharId }) => (
-        <StyledLink onClick={() => getCharId({ id })} to={formatedName}>
-          <CardContainer>
-            <Image src={image} alt="Character" />
+  if (!name) {
+    return <LoadingMessage />;
+  } else {
+    const formattedName = formatName(name);
+    return (
+      <StyledLink
+        onClick={() => dispatch(getSelectedCharId(id))}
+        to={formattedName}
+      >
+        <CardContainer>
+          <Image src={image} alt="Character" />
+          <InfoContainer>
             <p>Name: {name}</p>
             <p>Origin: {origin.name}</p>
             <p>Race: {species}</p>
             <p>Status: {status}</p>
             <p>Current location: {location.name}</p>
-          </CardContainer>
-        </StyledLink>
-      )}
-    </Context.Consumer>
-  );
+          </InfoContainer>
+        </CardContainer>
+      </StyledLink>
+    );
+  }
 };
 
 export default Card;

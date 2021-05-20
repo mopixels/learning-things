@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { formatName } from "../utils/formatName";
 import { Context } from "../Context";
+import { CharacterProps } from "types/types";
 
 const StyledLink = styled(Link)`
   text-decoration: none;
@@ -21,30 +22,18 @@ const Image = styled.img`
 `;
 
 type CardProps = {
-  data: {
-    image: string;
-    name: string;
-    origin: {
-      name: string;
-    };
-    species: string;
-    status: string;
-    id: string;
-    location: {
-      name: string;
-    };
-  };
+  character: CharacterProps;
 };
 
 const Card: React.FC<CardProps> = ({
-  data: { image, name, origin, species, status, id, location },
+  character: { image, name, origin, species, status, id, location },
 }) => {
   const formatedName = formatName(name);
 
   return (
     <Context.Consumer>
-      {({ selectedChar }) => (
-        <StyledLink onClick={() => selectedChar({ id })} to={formatedName}>
+      {({ getCharId }) => (
+        <StyledLink onClick={() => getCharId({ id })} to={formatedName}>
           <CardContainer>
             <Image src={image} alt="Character" />
             <p>Name: {name}</p>

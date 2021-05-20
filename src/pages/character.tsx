@@ -17,13 +17,11 @@ const StyledLink = styled(Link)`
   margin-top: 32px;
 `;
 
-type CharacterPageProps = {};
-
-const CharacterPage: React.FC<CharacterPageProps> = () => {
+const CharacterPage: React.FC = () => {
   const context = React.useContext(Context);
   const id = context.selectedCharId || localStorage.getItem("id");
 
-  const fetchCurrentCharacter = async (id: string) => {
+  const fetchCurrentCharacter = async (id: string | number | null) => {
     const res = await fetch(`https://rickandmortyapi.com/api/character/${id}`);
     return res.json();
   };
@@ -34,6 +32,9 @@ const CharacterPage: React.FC<CharacterPageProps> = () => {
 
   useEffect(() => {
     localStorage.setItem("id", id);
+    return () => {
+      localStorage.clear();
+    };
   }, [id]);
 
   if (status === "error") {
@@ -57,7 +58,7 @@ const CharacterPage: React.FC<CharacterPageProps> = () => {
           {currentCharacterGender} is {species} and currently {status}
         </p>
         <p>Other {location.name} residents are:</p>
-        <NeighbourResidents location={location.url} />
+        <NeighbourResidents locationUrl={location.url} />
       </Section>
     );
   }

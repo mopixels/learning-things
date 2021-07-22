@@ -1,3 +1,2 @@
-export const formatName = (name: string) => {
-  return name.replace(/\s/g, "-").toLowerCase();
-};
+export const formatName = (name: string): string =>
+  name.replace(/\s/g, "-").toLowerCase();

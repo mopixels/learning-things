@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import Card from "../components/Card";
 import { useInfiniteQuery } from "react-query";
+import Card from "../components/Card";
 import { CharacterProps } from "types/types";
+import { fetchCharacters } from "utils/api";
+import { LoadingMessage } from "components/LoadingMessage";
 
 const Section = styled.section`
   display: flex;
@@ -28,18 +30,6 @@ const CtaContainer = styled.div`
 `;
 
 const HomePage: React.FC = () => {
-  const fetchCharacters = async ({ pageParam = 1 }) => {
-    if (typeof pageParam === "number") {
-      const res = await fetch(
-        `https://rickandmortyapi.com/api/character/?page=${pageParam}`
-      );
-      return res.json();
-    } else {
-      const res = await fetch(`${pageParam}`);
-      return res.json();
-    }
-  };
-
   const {
     data,
     fetchNextPage,
@@ -54,7 +44,7 @@ const HomePage: React.FC = () => {
   if (status === "error") {
     return <div>Error: sorry something went wrong please try again later</div>;
   } else if (status === "loading") {
-    return <div>Loading...</div>;
+    return <LoadingMessage />;
   } else {
     return (
       <Section>

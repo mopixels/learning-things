@@ -26,8 +26,8 @@ export const fetchCurrentLocationData = async (
   return res.json();
 };
 
-// export const fetchResidentCharacters = async (
-//   urlWithCharacterList: string[] | undefined
+// export const fetchResidentCharacterss = async (
+//   urlWithCharacterList: string | string[] | undefined
 // ): Promise<any> => {
 //   const res = await fetch(
 //     `https://rickandmortyapi.com/api/character/${urlWithCharacterList?.toString()}`

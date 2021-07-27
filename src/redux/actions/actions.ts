@@ -1,7 +1,7 @@
 import {
   GET_SELECTED_CHAR_ID,
-  FETCH_RESIDENT_CHARACTERS,
-  CLEAR_RESIDENT_CHARACTERS,
+  FETCH_NEIGHBOURS,
+  CLEAR_NEIGHBOURS,
 } from "../constants";
 
 export const getSelectedCharId = (id: string) => ({
@@ -9,13 +9,14 @@ export const getSelectedCharId = (id: string) => ({
   payload: id,
 });
 
-export const fetchResidentCharacters = (
+export const fetchNeighbours = (
   urlWithCharacterList: string | string[] | undefined
 ) => {
-  if (urlWithCharacterList === undefined) {
+  if (urlWithCharacterList === "") {
     return (dispatch: any) =>
       dispatch({
-        type: CLEAR_RESIDENT_CHARACTERS,
+        type: CLEAR_NEIGHBOURS,
+        payload: [],
       });
   } else {
     return async (dispatch: any, getState: any) => {
@@ -23,9 +24,8 @@ export const fetchResidentCharacters = (
         `https://rickandmortyapi.com/api/character/${urlWithCharacterList?.toString()}`
       );
       const charList = await res.json();
-      console.log(charList);
       dispatch({
-        type: FETCH_RESIDENT_CHARACTERS,
+        type: FETCH_NEIGHBOURS,
         payload: charList,
       });
     };

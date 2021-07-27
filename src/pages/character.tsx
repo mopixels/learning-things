@@ -2,10 +2,11 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
-import NeighborResidents from "../components/NeighborResidents";
+import NeighbourResidents from "../components/NeighbourResidents";
 import { fetchSelectedCharacter } from "utils/api";
 import { RootStateOrAny, useSelector } from "react-redux";
 import { LoadingMessage } from "components/LoadingMessage";
+import { ErrorMessage } from "components/ErrorMessage";
 
 const Section = styled.section`
   display: flex;
@@ -21,12 +22,13 @@ const StyledLink = styled(Link)`
 
 const CharacterPage: React.FC = () => {
   const selectedCharId = useSelector(
-    (state: RootStateOrAny) => state.getSelectedCharIdReducer
+    (state: RootStateOrAny) => state.selectedCharId
   );
   const id: string = selectedCharId || localStorage.getItem("id")!;
 
-  const { data, status } = useQuery(["characters", id], () =>
-    fetchSelectedCharacter(id)
+  const { data, isError, isLoading, isFetched } = useQuery(
+    ["characters", id],
+    () => fetchSelectedCharacter(id)
   );
 
   useEffect(() => {
@@ -36,30 +38,33 @@ const CharacterPage: React.FC = () => {
     };
   }, [id]);
 
-  if (status === "error") {
-    return <div>Error: sorry something went wrong please try again later</div>;
-  } else if (status === "loading") {
-    return <LoadingMessage />;
-  } else {
-    const { image, name, origin, gender, species, status, location } = data;
-    const currentCharacterGender =
-      gender === "Male" ? "He" : gender === "Female" ? "She" : "It";
-    return (
-      <Section>
-        <StyledLink to="/">Homepage &rarr;</StyledLink>
-        <h1>Well hello there, this is {name}'s profile !</h1>
-        <img src={image} alt="Character" />
-        <p>
-          {name} is from {origin?.name}
-        </p>
-        <p>
-          {currentCharacterGender} is {species} and currently {status}
-        </p>
-        <p>Other {location?.name} residents are:</p>
-        <NeighborResidents locationUrl={location?.url} />
-      </Section>
-    );
-  }
+  // COULDN'T FIND A WAY TO DESTRUCTURE
+  // NOT WORKING - const { image, name, origin, gender, species, status, location } = data;
+  const currentCharacterGender =
+    data?.gender === "Male" ? "He" : data?.gender === "Female" ? "She" : "It";
+
+  return (
+    <>
+      {isError && <ErrorMessage />}
+      {isLoading && <LoadingMessage />}
+      {isFetched && (
+        <Section>
+          <StyledLink to="/">Homepage &rarr;</StyledLink>
+          <h1>Well hello there, this is {data.name}'s profile !</h1>
+          <img src={data.image} alt="Character" />
+          <p>
+            {data.name} is from {data.origin.name}
+          </p>
+          <p>
+            {currentCharacterGender} is {data?.species} and currently{" "}
+            {data.status}
+          </p>
+          <p>Other {data.location.name} residents are:</p>
+          <NeighbourResidents locationUrl={data.location.url} />
+        </Section>
+      )}
+    </>
+  );
 };
 
 export default CharacterPage;

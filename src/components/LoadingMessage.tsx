@@ -8,6 +8,4 @@ const LoadingMsg = styled.div`
   height: 100vh;
 `;
 
-export const LoadingMessage = () => {
-  return <LoadingMsg>Loading ...</LoadingMsg>;
-};
+export const LoadingMessage = () => <LoadingMsg>Loading ...</LoadingMsg>;

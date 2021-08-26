@@ -35,7 +35,7 @@ interface getSelectedCharId {
   payload: string;
 }
 interface fetchResidentCharacters {
-  type: "FETCH_RESIDENT_CHARACTERS" | "CLEAR_RESIDENT_CHARACTERS";
+  type: "FETCH_NEIGHBOURS" | "CLEAR_NEIGHBOURS";
   payload: string[] | undefined;
 }
 

@@ -5,6 +5,7 @@ import Card from "../components/Card";
 import { CharacterProps } from "types/types";
 import { fetchCharacters } from "utils/api";
 import { LoadingMessage } from "components/LoadingMessage";
+import { ErrorMessage } from "components/ErrorMessage";
 
 const Section = styled.section`
   display: flex;
@@ -36,43 +37,47 @@ const HomePage: React.FC = () => {
     hasNextPage,
     isFetching,
     isFetchingNextPage,
-    status,
+    isFetched,
+    isError,
+    isLoading,
   } = useInfiniteQuery("characters", fetchCharacters, {
     getNextPageParam: (lastPage) => lastPage.info.next,
   });
 
-  if (status === "error") {
-    return <div>Error: sorry something went wrong please try again later</div>;
-  } else if (status === "loading") {
-    return <LoadingMessage />;
-  } else {
-    return (
-      <Section>
-        <CardGrid>
-          {data?.pages.map((page) =>
-            page.results.map((character: CharacterProps, i: number) => (
-              <Card key={character.name + i} character={character} />
-            ))
-          )}
-        </CardGrid>
-        <CtaContainer>
-          <div>
-            <button
-              onClick={() => fetchNextPage()}
-              disabled={!hasNextPage || isFetchingNextPage}
-            >
-              {isFetchingNextPage
-                ? "Loading more..."
-                : hasNextPage
-                ? "Load More"
-                : "Nothing more to load"}
-            </button>
-          </div>
-          <div>{isFetching && !isFetchingNextPage ? "Fetching..." : null}</div>
-        </CtaContainer>
-      </Section>
-    );
-  }
+  return (
+    <>
+      {isError && <ErrorMessage />}
+      {isLoading && <LoadingMessage />}
+      {isFetched && (
+        <Section>
+          <CardGrid>
+            {data?.pages.map((page) =>
+              page.results.map((character: CharacterProps, i: number) => (
+                <Card key={character.name + i} character={character} />
+              ))
+            )}
+          </CardGrid>
+          <CtaContainer>
+            <div>
+              <button
+                onClick={() => fetchNextPage()}
+                disabled={!hasNextPage || isFetchingNextPage}
+              >
+                {isFetchingNextPage
+                  ? "Loading more..."
+                  : hasNextPage
+                  ? "Load More"
+                  : "Nothing more to load"}
+              </button>
+            </div>
+            <div>
+              {isFetching && !isFetchingNextPage ? "Fetching..." : null}
+            </div>
+          </CtaContainer>
+        </Section>
+      )}
+    </>
+  );
 };
 
 export default HomePage;

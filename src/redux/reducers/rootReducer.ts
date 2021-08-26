@@ -1,10 +1,8 @@
 import { combineReducers } from "redux";
-import {
-  getSelectedCharIdReducer,
-  fetchResidentCharactersReducer,
-} from "./reducers";
+import { fetchNeighboursReducer } from "./fetchNeighbours";
+import { getSelectedCharIdReducer } from "./getSelectedCharId";
 
 export default combineReducers({
-  getSelectedCharIdReducer,
-  fetchResidentCharactersReducer,
+  selectedCharId: getSelectedCharIdReducer,
+  neighbours: fetchNeighboursReducer,
 });

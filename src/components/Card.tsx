@@ -35,29 +35,30 @@ const Card: React.FC<CardProps> = ({
   character: { image, name, origin, species, status, id, location },
 }) => {
   const dispatch = useDispatch();
+  const formattedName = formatName(name);
 
-  if (!name) {
-    return <LoadingMessage />;
-  } else {
-    const formattedName = formatName(name);
-    return (
-      <StyledLink
-        onClick={() => dispatch(getSelectedCharId(id))}
-        to={formattedName}
-      >
-        <CardContainer>
-          <Image src={image} alt="Character" />
-          <InfoContainer>
-            <p>Name: {name}</p>
-            <p>Origin: {origin.name}</p>
-            <p>Race: {species}</p>
-            <p>Status: {status}</p>
-            <p>Current location: {location.name}</p>
-          </InfoContainer>
-        </CardContainer>
-      </StyledLink>
-    );
-  }
+  const handleClick = () => dispatch(getSelectedCharId(id));
+
+  return (
+    <>
+      {!name ? (
+        <LoadingMessage />
+      ) : (
+        <StyledLink onClick={() => handleClick()} to={formattedName}>
+          <CardContainer>
+            <Image src={image} alt="Character" />
+            <InfoContainer>
+              <p>Name: {name}</p>
+              <p>Origin: {origin.name}</p>
+              <p>Race: {species}</p>
+              <p>Status: {status}</p>
+              <p>Current location: {location.name}</p>
+            </InfoContainer>
+          </CardContainer>
+        </StyledLink>
+      )}
+    </>
+  );
 };
 
 export default Card;

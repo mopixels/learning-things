@@ -1,5 +1,10 @@
-import { formatName } from "../../utils/formatName";
+import { formatName } from '../../utils/formatName'
 
-test("formatName", () => {
-  expect(formatName("John Johnson123")).toBe("john-johnson123");
-});
+const nameMock = 'The rIcKy Rick'
+
+describe('formatName', () => {
+  it('should replace spaces with dash and convert letters to lower case', () => {
+    const result = formatName(nameMock)
+    expect(result).toBe('the-ricky-rick')
+  })
+})

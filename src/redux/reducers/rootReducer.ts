@@ -1,8 +1,8 @@
-import { combineReducers } from "redux";
-import { fetchNeighboursReducer } from "./fetchNeighbours";
-import { getSelectedCharIdReducer } from "./getSelectedCharId";
+import { combineReducers } from 'redux'
+import { Neighbours } from './Neighbours'
+import { SelectedCharId } from './SelectedCharId'
 
 export default combineReducers({
-  selectedCharId: getSelectedCharIdReducer,
-  neighbours: fetchNeighboursReducer,
-});
+  SelectedCharId,
+  Neighbours
+})

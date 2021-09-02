@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { useQuery } from "react-query";
-import NeighbourResidents from "../components/NeighbourResidents";
-import { fetchSelectedCharacter } from "utils/api";
-import { RootStateOrAny, useSelector } from "react-redux";
-import { LoadingMessage } from "components/LoadingMessage";
-import { ErrorMessage } from "components/ErrorMessage";
+import React, { useEffect } from 'react'
+import styled from 'styled-components'
+import { Link } from 'react-router-dom'
+import { useQuery } from 'react-query'
+import NeighbourResidents from '../components/NeighbourResidents'
+import { fetchSelectedCharacter } from 'utils/api'
+import { RootStateOrAny, useSelector } from 'react-redux'
+import { LoadingMessage } from 'components/LoadingMessage'
+import { ErrorMessage } from 'components/ErrorMessage'
 
 const Section = styled.section`
   display: flex;
@@ -14,34 +14,32 @@ const Section = styled.section`
   align-items: center;
   flex-direction: column;
   margin: 64px;
-`;
+`
 
 const StyledLink = styled(Link)`
   margin-top: 32px;
-`;
+`
 
 const CharacterPage: React.FC = () => {
   const selectedCharId = useSelector(
-    (state: RootStateOrAny) => state.selectedCharId
-  );
-  const id: string = selectedCharId || localStorage.getItem("id")!;
+    (state: RootStateOrAny) => state.SelectedCharId
+  )
+  const id: string = selectedCharId || sessionStorage.getItem('id')!
 
   const { data, isError, isLoading, isFetched } = useQuery(
-    ["characters", id],
+    ['characters', id],
     () => fetchSelectedCharacter(id)
-  );
+  )
 
   useEffect(() => {
-    localStorage.setItem("id", id);
+    sessionStorage.setItem('id', id)
     return () => {
-      localStorage.clear();
-    };
-  }, [id]);
+      sessionStorage.clear()
+    }
+  }, [id])
 
-  // COULDN'T FIND A WAY TO DESTRUCTURE
-  // NOT WORKING - const { image, name, origin, gender, species, status, location } = data;
   const currentCharacterGender =
-    data?.gender === "Male" ? "He" : data?.gender === "Female" ? "She" : "It";
+    data?.gender === 'Male' ? 'He' : data?.gender === 'Female' ? 'She' : 'It'
 
   return (
     <>
@@ -56,7 +54,7 @@ const CharacterPage: React.FC = () => {
             {data.name} is from {data.origin.name}
           </p>
           <p>
-            {currentCharacterGender} is {data?.species} and currently{" "}
+            {currentCharacterGender} is {data.species} and currently{' '}
             {data.status}
           </p>
           <p>Other {data.location.name} residents are:</p>
@@ -64,7 +62,7 @@ const CharacterPage: React.FC = () => {
         </Section>
       )}
     </>
-  );
-};
+  )
+}
 
-export default CharacterPage;
+export default CharacterPage

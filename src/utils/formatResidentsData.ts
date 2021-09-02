@@ -1,4 +1,4 @@
-export const formatResidentsData = (neighbours: string[] | undefined) =>
+export const formatResidentsData = (neighbours: string[]) =>
   neighbours?.map((resident: string) =>
-    resident.substr(resident.lastIndexOf("/") + 1)
-  );
+    resident.substr(resident.lastIndexOf('/') + 1)
+  )

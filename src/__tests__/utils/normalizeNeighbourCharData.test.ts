@@ -1,5 +1,6 @@
 import { normalizeNeighbourCharData } from '../../utils/normalizeNeighbourCharData'
 
+// Move mock data to different folders
 const BeeboChar = {
   id: '33',
   name: 'Beebo',
@@ -72,7 +73,7 @@ const arrayOfCharacters = [
 ]
 
 describe('formatResidentsData', () => {
-  it('should add object to arrays', () => {
+  it('should add object to array', () => {
     const result = normalizeNeighbourCharData(BeeboChar)
     expect(result).toStrictEqual([BeeboChar])
   })
